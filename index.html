@@ -758,7 +758,7 @@ body{font-family:'Noto Sans TC',sans-serif;color:var(--ink);display:flex;justify
     <!-- 地鐵圖全螢幕 lightbox -->
     <div id="metroLightbox" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:300;overflow:hidden;touch-action:none">
       <!-- 圖片容器：拖拉縮放 -->
-      <div id="metroPanZoom" style="position:absolute;inset:0;overflow:hidden;touch-action:none">
+      <div id="metroPanZoom" style="position:absolute;inset:0;overflow:hidden;touch-action:none" onclick="if(event.target.id==='metroPanZoom'||event.target.id==='metroFullImg')closeMetroFull()">
         <img id="metroFullImg" src="./assets/tokyo-metro.png" alt="東京地鐵圖"
           style="position:absolute;top:50%;left:50%;width:auto;height:auto;max-width:none;transform-origin:0 0;user-select:none;-webkit-user-drag:none;pointer-events:none">
       </div>
@@ -770,7 +770,7 @@ body{font-family:'Noto Sans TC',sans-serif;color:var(--ink);display:flex;justify
         <button onclick="closeMetroFull()" style="background:rgba(255,80,80,.95);color:white;border:none;border-radius:8px;padding:0 14px;height:42px;font-size:13px;cursor:pointer;font-family:inherit">✕ 關閉</button>
       </div>
       <!-- 提示 -->
-      <div id="metroHint" style="position:absolute;bottom:max(20px,env(safe-area-inset-bottom,0px));left:50%;transform:translateX(-50%);background:rgba(0,0,0,.6);color:white;padding:6px 14px;border-radius:18px;font-size:12px;pointer-events:none;transition:opacity .3s">雙指縮放 · 拖動移動 · 雙擊重置</div>
+      <div id="metroHint" style="position:absolute;bottom:max(20px,env(safe-area-inset-bottom,0px));left:50%;transform:translateX(-50%);background:rgba(0,0,0,.6);color:white;padding:6px 14px;border-radius:18px;font-size:12px;pointer-events:none;transition:opacity .3s">雙指縮放 · 拖動移動 · 輕點關閉</div>
     </div>
 
     <!-- 打包清單 -->
@@ -2473,7 +2473,7 @@ function closeMetroFull(){
 //  地鐵圖 Pan-Zoom（雙指縮放 + 拖動 + 雙擊重置）
 // ════════════════════════════════
 let _mz = { scale: 1, tx: 0, ty: 0, minScale: 0.5, maxScale: 5 };
-let _mzTouch = { startScale: 1, startDist: 0, startTx: 0, startTy: 0, startX: 0, startY: 0, mode: null, lastTap: 0 };
+let _mzTouch = { startScale: 1, startDist: 0, startTx: 0, startTy: 0, startX: 0, startY: 0, mode: null, lastTap: 0, moved: false, downX: 0, downY: 0, downTime: 0 };
 
 function metroApplyTransform(){
   const img = document.getElementById("metroFullImg");
@@ -2501,11 +2501,11 @@ function metroOnTouchStart(e){
     _mzTouch.startDist = metroDist(e.touches);
     _mzTouch.startScale = _mz.scale;
   } else if(e.touches.length === 1){
-    // 雙擊重置
     const now = Date.now();
     if(now - _mzTouch.lastTap < 300){
       metroReset();
       _mzTouch.lastTap = 0;
+      _mzTouch.moved = true;
       return;
     }
     _mzTouch.lastTap = now;
@@ -2514,23 +2514,39 @@ function metroOnTouchStart(e){
     _mzTouch.startY = e.touches[0].clientY;
     _mzTouch.startTx = _mz.tx;
     _mzTouch.startTy = _mz.ty;
+    _mzTouch.downX = e.touches[0].clientX;
+    _mzTouch.downY = e.touches[0].clientY;
+    _mzTouch.downTime = now;
+    _mzTouch.moved = false;
   }
 }
 function metroOnTouchMove(e){
   if(_mzTouch.mode === "pinch" && e.touches.length === 2){
     e.preventDefault();
+    _mzTouch.moved = true;
     const d = metroDist(e.touches);
     _mz.scale = Math.max(_mz.minScale, Math.min(_mz.maxScale, _mzTouch.startScale * (d / _mzTouch.startDist)));
     metroApplyTransform();
   } else if(_mzTouch.mode === "pan" && e.touches.length === 1){
     e.preventDefault();
+    // 移動超過 10px 才算拖曳
+    const dx = e.touches[0].clientX - _mzTouch.downX;
+    const dy = e.touches[0].clientY - _mzTouch.downY;
+    if(Math.hypot(dx, dy) > 10) _mzTouch.moved = true;
     _mz.tx = _mzTouch.startTx + (e.touches[0].clientX - _mzTouch.startX);
     _mz.ty = _mzTouch.startTy + (e.touches[0].clientY - _mzTouch.startY);
     metroApplyTransform();
   }
 }
 function metroOnTouchEnd(e){
-  if(e.touches.length === 0) _mzTouch.mode = null;
+  if(e.touches.length === 0){
+    // 輕點（沒移動、時間短）→ 關閉地圖
+    const dt = Date.now() - (_mzTouch.downTime || 0);
+    if(_mzTouch.mode === "pan" && !_mzTouch.moved && dt < 250){
+      closeMetroFull();
+    }
+    _mzTouch.mode = null;
+  }
 }
 
 // 綁定事件（在 DOM ready 時）
