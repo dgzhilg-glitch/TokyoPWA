@@ -1,0 +1,16 @@
+﻿{
+  "name": "???- ?交??閬?",
+  "short_name": "???",
+  "description": "?交??銵?閬? PWA",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#2D1B4E",
+  "theme_color": "#2D1B4E",
+  "orientation": "portrait",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ],
+  "categories": ["travel", "lifestyle"],
+  "lang": "zh-TW"
+}
