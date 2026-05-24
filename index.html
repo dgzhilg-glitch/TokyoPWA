@@ -369,56 +369,52 @@ body{font-family:'Noto Sans TC',sans-serif;color:var(--ink);display:flex;justify
 .info-box-t{font-size:13px;font-weight:700;margin-bottom:5px}
 .info-box-c{font-size:14px;line-height:1.7}
 
-/* MILESTONE BAR - 交錯式 */
+/* MILESTONE BAR - 交錯式（東京旅行路線風格）*/
 .milestone-bar{margin-bottom:16px;padding:18px 18px 14px}
 .milestone-stagger-wrap{
   position:relative;width:100%;
-  padding:60px 4px;  /* 上下留空間給交錯圖示 */
+  padding:72px 8px;  /* 上下留空間給交錯圖示（圖示變大需更多空間）*/
   box-sizing:border-box;
 }
-/* 進度條軌道 */
+/* 主線軌道：白底 + 粗黑外框，像地圖路線 */
 .ms-track{
-  position:absolute;left:0;right:0;
+  position:absolute;left:8px;right:8px;
   top:50%;transform:translateY(-50%);
-  height:5px;background:var(--border);border-radius:4px;overflow:hidden;
+  height:8px;background:#fff;
+  border:2.5px solid var(--ink,#2C2C3E);
+  border-radius:6px;overflow:hidden;
 }
+/* 進度填充：純紅色 */
 .ms-fill{
-  height:100%;background:linear-gradient(90deg,var(--rose-dk),var(--amber));
-  border-radius:4px;transition:width .6s ease;
-  position:relative;
+  height:100%;background:var(--rose-dk,#B85570);
+  border-radius:3px;transition:width .6s ease;
 }
-/* 進度條發光頭 */
-.ms-fill::after{
-  content:'';position:absolute;right:-1px;top:-3px;
-  width:11px;height:11px;border-radius:50%;
-  background:var(--rose-dk);
-  box-shadow:0 0 0 3px rgba(184,85,112,.25);
+/* 站點圓點：22px、黑色粗外框 */
+.ms-dot{
+  position:absolute;top:50%;transform:translate(-50%,-50%);
+  width:22px;height:22px;border-radius:50%;
+  border:3px solid var(--ink,#2C2C3E);
+  background:#fff;
+  z-index:2;box-sizing:border-box;
 }
+.ms-dot.reached{ background:var(--rose-dk,#B85570); }
+.ms-dot.pending{ background:#fff; }
 /* 每個里程碑圖示位置 */
 .ms-item{
   position:absolute;
   display:flex;flex-direction:column;align-items:center;gap:3px;
   transform:translateX(-50%);
+  z-index:3;
 }
-.ms-item.above{ bottom:calc(50% + 14px); }  /* 進度條上方 */
-.ms-item.below{ top:calc(50% + 14px); }     /* 進度條下方 */
+.ms-item.above{ bottom:calc(50% + 22px); }  /* 進度條上方（避開放大的站點）*/
+.ms-item.below{ top:calc(50% + 22px); }      /* 進度條下方 */
 .ms-item img{
-  width:46px;height:46px;object-fit:contain;
+  width:56px;height:56px;object-fit:contain;
   background:transparent;
-  filter:drop-shadow(0 2px 3px rgba(44,44,62,.08));
+  filter:drop-shadow(0 2px 4px rgba(44,44,62,.12));
   animation:stampPop .45s cubic-bezier(.2,.95,.3,1.25);
 }
 .ms-item span{ display:none; }
-
-/* 進度條上的刻度點 */
-.ms-dot{
-  position:absolute;top:50%;transform:translate(-50%,-50%);
-  width:8px;height:8px;border-radius:50%;
-  border:2px solid white;
-  z-index:1;
-}
-.ms-dot.reached{ background:var(--rose-dk); }
-.ms-dot.pending{ background:var(--border); }
 
 .milestone-total{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px;padding:0 2px}
 .milestone-total-lbl{font-size:14px;font-weight:600;color:var(--ink-mid);letter-spacing:0.3px}
@@ -430,7 +426,7 @@ body{font-family:'Noto Sans TC',sans-serif;color:var(--ink);display:flex;justify
   60%{opacity:1;transform:scale(1.2) rotate(5deg)}
   80%{transform:scale(0.95) rotate(-2deg)}
   100%{opacity:1;transform:scale(1) rotate(0deg)}
-}
+}}
 
 /* ACCT HERO */
 .acct-hero{background:linear-gradient(135deg,#2C2C3E,#555570);border-radius:var(--r);padding:20px;color:white;margin-bottom:12px}
@@ -499,6 +495,15 @@ body{font-family:'Noto Sans TC',sans-serif;color:var(--ink);display:flex;justify
 .sched-note-toggle{display:inline-flex;align-items:center;gap:3px;font-size:11px;color:var(--rose-dk);background:var(--rose-lt);border:none;border-radius:20px;padding:2px 9px;margin-top:4px;cursor:pointer;font-family:'Noto Sans TC',sans-serif;font-weight:500}
 .sched-note-toggle i{font-size:9px;transition:transform .2s}
 .sched-note-toggle.expanded i{transform:rotate(180deg)}
+
+/* ADD TO SCHEDULE */
+.btn-add-sched{background:var(--sage,#5A8C6E);color:white;border:none;border-radius:8px;padding:6px 12px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;margin-right:6px}
+.btn-add-sched:active{transform:scale(.94)}
+.add-sched-list{display:flex;flex-direction:column;gap:8px;max-height:50vh;overflow-y:auto}
+.add-sched-opt{display:flex;flex-direction:column;align-items:flex-start;gap:2px;background:var(--bg);border:1.5px solid var(--border);border-radius:12px;padding:12px 14px;cursor:pointer;text-align:left;font-family:inherit;transition:all .15s}
+.add-sched-opt:active{background:var(--rose-lt);border-color:var(--rose-dk)}
+.add-sched-opt .as-day{font-size:11px;color:var(--rose-dk);font-weight:700}
+.add-sched-opt .as-title{font-size:14px;color:var(--ink);font-weight:600}
 
 /* SUB SCHEDULE */
 .sub-list{margin-top:6px;margin-left:70px;display:flex;flex-direction:column;gap:4px}
@@ -785,7 +790,7 @@ body{font-family:'Noto Sans TC',sans-serif;color:var(--ink);display:flex;justify
     <div class="card">
       <div class="info-box" style="background:var(--amber-lt)"><div class="info-box-t" style="color:var(--amber)">🏨 住宿</div><div class="info-box-c">Tosei Hotel Cocone Ueno Okachimachi<br><span style="font-size:13px;color:var(--ink-lt)">3 Chome-23-9 Ueno, Taito City, Tokyo 110-0005</span><br><span style="font-size:13px;color:var(--ink-lt)">CI 13:00 / CO 10:00</span></div></div>
       <div class="info-box" style="background:var(--sky-lt)"><div class="info-box-t" style="color:var(--sky)">✈️ 航班</div><div class="info-box-c"><b>去程</b> 06/04 樂桃 MM626<br>TPE 10:50 → NRT 15:20<br><b>回程</b> 06/08 樂桃 MM625<br>NRT 16:50 → TPE 19:40</div></div>
-      <div class="info-box" style="background:var(--danger-lt)"><div class="info-box-t" style="color:var(--danger)">🚨 緊急電話</div><div class="info-box-c">警察 <b>110</b> · 救護車 <b>119</b><br>台灣駐日代表處 03-3280-7811</div></div>
+      <div class="info-box" style="background:var(--danger-lt)"><div class="info-box-t" style="color:var(--danger)">🚨 緊急電話</div><div class="info-box-c">警察 <b>110</b> · 救護車 <b>119</b><br>台灣駐日代表處 03-3280-7811<br>警察諮詢(非緊急) <b>#8110</b><br>醫療諮詢 <b>#7119</b><br>海外急難救助 <b>+886-800-085-095</b></div></div>
     </div>
   </div>
 </div>
@@ -1991,7 +1996,7 @@ function renderRest(){
           ${r.map_url?`<button class="btn-map" onclick="openMap('${r.map_url}')"><i class="fas fa-map-marker-alt"></i>Maps</button>`:""}
           ${tab==="rec"
             ? (added?`<button class="btn-done">✓ 已收藏</button>`:`<button class="btn-add-l" onclick="addRest(${masterIdx})">+ 加入清單</button>`)
-            : `<button class="btn-del-l" onclick="delRest(${r.id})">移除</button>`}
+            : `<button class="btn-add-sched" onclick="openAddToSched('restaurant',${r.id})">+ 行程</button><button class="btn-del-l" onclick="delRest(${r.id})">移除</button>`}
         </div>
       </div>
     </div>`;
@@ -2017,9 +2022,10 @@ async function addRest(i){
   renderRest(); toast(`✅ ${r.name} 已加入，已同步至今日行程`);
 }
 async function delRest(id){
-  if(!confirm("移除？"))return;
-  await POST("/api/restaurants/delete",{id});
-  S.rest.mine=S.rest.mine.filter(r=>r.id!==id); renderRest(); toast("已移除");
+  S.rest.mine=S.rest.mine.filter(r=>r.id!==id);
+  renderRest();
+  try{ await POST("/api/restaurants/delete",{id}); }catch(e){ console.error(e); }
+  toast("已移除");
 }
 function switchRestTab(tab,btn){
   S.restTab=tab;
@@ -2085,7 +2091,7 @@ function renderSpots(){
             ${s.map_url?`<button class="btn-map" onclick="openMap('${s.map_url}')"><i class="fas fa-map-marker-alt"></i>Maps</button>`:""}
             ${tab==="rec"
               ? (added?`<button class="btn-done">✓ 已收藏</button>`:`<button class="btn-add-l" onclick="addSpot(${masterIdx})">+ 加入清單</button>`)
-              : `<button class="btn-del-l" onclick="delSpot(${s.id})">移除</button>`}
+              : `<button class="btn-add-sched" onclick="openAddToSched('spot',${s.id})">+ 行程</button><button class="btn-del-l" onclick="delSpot(${s.id})">移除</button>`}
           </div>
         </div>
       </div>
@@ -2112,9 +2118,10 @@ async function addSpot(i){
   renderSpots(); toast(`✅ ${s.name} 已加入，已同步至今日行程`);
 }
 async function delSpot(id){
-  if(!confirm("移除？"))return;
-  await POST("/api/spots/delete",{id});
-  S.spots.mine=S.spots.mine.filter(s=>s.id!==id); renderSpots(); toast("已移除");
+  S.spots.mine=S.spots.mine.filter(s=>s.id!==id);
+  renderSpots();
+  try{ await POST("/api/spots/delete",{id}); }catch(e){ console.error(e); }
+  toast("已移除");
 }
 function switchSpotTab(tab,btn){
   S.spotTab=tab;
@@ -2444,6 +2451,65 @@ async function refreshSubSchedules(){
   if(d){ S.subSchedules=d; renderSched(); }
 }
 
+// 開啟「加入主行程」選擇 modal
+function openAddToSched(sourceType, sourceId){
+  // 找到來源項目
+  const item = sourceType==="restaurant"
+    ? S.rest.mine.find(r=>r.id===sourceId)
+    : S.spots.mine.find(s=>s.id===sourceId);
+  if(!item){ toast("找不到項目"); return; }
+
+  // 只列出允許掛子行程的主行程節點（allow_sub=1）
+  const nodes = (S.schedule||[]).filter(s=>Number(s.allow_sub)===1)
+    .sort((a,b)=>(a.day-b.day)||((a.time||"").localeCompare(b.time||"")));
+
+  if(!nodes.length){
+    toast("目前沒有可加入的主行程節點");
+    return;
+  }
+
+  const opts = nodes.map(n=>{
+    const dayLbl = `第${n.day}天`;
+    const t = n.time ? ` ${n.time}` : "";
+    return `<button class="add-sched-opt" onclick="doAddToSched('${sourceType}',${sourceId},${n.id})">
+      <span class=" as-day">${dayLbl}${t}</span>
+      <span class="as-title">${n.title||n.location||"行程"}</span>
+    </button>`;
+  }).join("");
+
+  document.getElementById("modalBody").innerHTML = `
+    <div class="modal-title">加入行程：${item.name}</div>
+    <div style="font-size:13px;color:var(--ink-lt);margin-bottom:12px">選擇要加到哪個主行程節點</div>
+    <div class="add-sched-list">${opts}</div>
+    <div class="modal-acts"><button class="btn btn-gh" onclick="closeModal()">取消</button></div>`;
+  document.getElementById("modal").classList.add("open");
+}
+
+async function doAddToSched(sourceType, sourceId, scheduleId){
+  const item = sourceType==="restaurant"
+    ? S.rest.mine.find(r=>r.id===sourceId)
+    : S.spots.mine.find(s=>s.id===sourceId);
+  if(!item){ toast("找不到項目"); return; }
+  closeModal();
+
+  const res = await POST(`/api/sub-schedules/add-manual${mq()}`, {
+    schedule_id: scheduleId,
+    name: item.name,
+    type: sourceType==="restaurant" ? "餐廳" : (item.type||"景點"),
+    map_url: item.map_url||"",
+    note: item.note||item.feature||"",
+    source_type: sourceType,
+    source_id: sourceId,
+  });
+
+  await refreshSubSchedules();
+  if(res?.duplicate){
+    toast("此行程已有該項目");
+  } else {
+    toast("✅ 已加入行程");
+  }
+}
+
 function todaySched(d=S.day){ return S.schedule.filter(r=>+r.day===+d).sort((a,b)=>{const[ah,am]=pt(a.time);const[bh,bm]=pt(b.time);return ah*60+am-(bh*60+bm);}); }
 function todayExp(){ const today=new Date().toLocaleDateString("sv-SE"); return S.expenses.filter(e=>{ if(e.expense_date) return e.expense_date===today; const dt=e.created_at?new Date(e.created_at):null; return dt&&dt.toLocaleDateString("sv-SE")===today; }); }
 function amt(e){ return parseFloat(e.amount||0)||0; }
@@ -2715,10 +2781,10 @@ const FB_SPOTS=[
   {id:66,name:"表參道之丘",area:"表參道",type:"購物/百貨",cost:"",map_url:"https://maps.app.goo.gl/eJ5ACNFNZbq9adZ5A?g_st=ic",feature:"安藤忠雄設計,建築美學",suggested_time:"",hours:"11:00-20:00",note:""},
 ];
 const FB_PACK=[
-  {id:1,item:"護照・簽證",checked:false},{id:2,item:"換日圓",checked:false},
-  {id:3,item:"JR Pass",checked:false},{id:4,item:"旅遊保險",checked:false},
-  {id:5,item:"備份藥品",checked:false},{id:6,item:"充電器・轉接頭",checked:false},
-  {id:7,item:"換洗衣物",checked:false},
+  {id:1,item:"護照",checked:false},{id:2,item:"日幣",checked:false},
+  {id:3,item:"信用卡",checked:false},{id:4,item:"西瓜卡",checked:false},
+  {id:5,item:"備份藥品",checked:false},{id:6,item:"充電器",checked:false},
+  {id:7,item:"換洗衣物",checked:false},{id:8,item:"盥洗用品",checked:false},
 ];
 </script>
 </body>
