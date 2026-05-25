@@ -2024,7 +2024,10 @@ async function addRest(i){
 async function delRest(id){
   S.rest.mine=S.rest.mine.filter(r=>r.id!==id);
   renderRest();
-  try{ await POST("/api/restaurants/delete",{id}); }catch(e){ console.error(e); }
+  try{
+    await POST("/api/restaurants/delete",{id});
+    await refreshSubSchedules();
+  }catch(e){ console.error(e); }
   toast("已移除");
 }
 function switchRestTab(tab,btn){
@@ -2120,7 +2123,10 @@ async function addSpot(i){
 async function delSpot(id){
   S.spots.mine=S.spots.mine.filter(s=>s.id!==id);
   renderSpots();
-  try{ await POST("/api/spots/delete",{id}); }catch(e){ console.error(e); }
+  try{
+    await POST("/api/spots/delete",{id});
+    await refreshSubSchedules();
+  }catch(e){ console.error(e); }
   toast("已移除");
 }
 function switchSpotTab(tab,btn){
@@ -2305,8 +2311,8 @@ async function saveExp(){
     name, amount:am, category:cat, expense_date:dateVal,
     payment_method:selectedPayment,
     tax_type:selectedTaxType,
-    refund_status:selectedTaxType!=="none"?(currentExp?.refund_status||"pending"):"none",
-    refund_batch_id:selectedTaxType!=="none"?(currentExp?.refund_batch_id||0):0,
+    refund_status:selectedTaxType!=="none"?"pending":"none",
+    refund_batch_id:0,
     shop_group
   };
 
@@ -2338,8 +2344,12 @@ async function saveExp(){
 
   // 新增模式
   const res=await POST(`/api/expenses${mq()}`, payload);
+  if(!res?.id){
+    toast("新增失敗，請再試一次");
+    return;
+  }
   const newExp={
-    id:res?.id, name, amount:am, category:cat,
+    id:res.id, name, amount:am, category:cat,
     expense_date:dateVal, payment_method:selectedPayment,
     tax_type:selectedTaxType,
     refund_status:selectedTaxType!=="none"?"pending":"none",

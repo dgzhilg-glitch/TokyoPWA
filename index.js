@@ -68,9 +68,9 @@ export default {
         if (path === "/api/tax/batches/delete")      return ok(await deleteTaxBatch(env, body.id));
         if (path === "/api/tax/expenses/toggle")     return ok(await toggleExpenseBatchWithSync(env, body));
         if (path === "/api/restaurants/mine")   return ok(await addMyRestaurant(env, member, body));
-        if (path === "/api/restaurants/delete") return ok(await deleteMyRestaurant(env, body.id));
+        if (path === "/api/restaurants/delete") return ok(await deleteMyRestaurant(env, member, body.id));
         if (path === "/api/spots/mine")         return ok(await addMySpot(env, member, body));
-        if (path === "/api/spots/delete")       return ok(await deleteMySpot(env, body.id));
+        if (path === "/api/spots/delete")       return ok(await deleteMySpot(env, member, body.id));
         if (path === "/api/packing")            return ok(await addPackingItem(env, member, body));
         if (path === "/api/packing/toggle")     return ok(await togglePacking(env, body.id, body.checked));
         if (path === "/api/sub-schedules")          return ok(await addSubSchedule(env, member, body));
@@ -432,9 +432,15 @@ async function addMyRestaurant(env, member, body) {
   return { id: res.id };
 }
 
-async function deleteMyRestaurant(env, id) {
-  await env.DB.prepare("DELETE FROM my_restaurants WHERE id=?").bind(id).run();
-  return { deleted: id };
+async function deleteMyRestaurant(env, member, id) {
+  const sourceId = Number(id) || 0;
+  if (!sourceId) return { deleted: 0 };
+
+  await env.DB.prepare("DELETE FROM my_restaurants WHERE id=?").bind(sourceId).run();
+  await env.DB.prepare(
+    "DELETE FROM sub_schedules WHERE member=? AND source_type='restaurant' AND source_id=?"
+  ).bind(member, sourceId).run();
+  return { deleted: sourceId };
 }
 
 // ═══════════════════════════════════════════
@@ -474,9 +480,49 @@ async function addMySpot(env, member, body) {
   return { id: res.id };
 }
 
-async function deleteMySpot(env, id) {
-  await env.DB.prepare("DELETE FROM my_spots WHERE id=?").bind(id).run();
-  return { deleted: id };
+async function deleteMySpot(env, member, id) {
+  const sourceId = Number(id) || 0;
+  if (!sourceId) return { deleted: 0 };
+
+  await env.DB.prepare("DELETE FROM my_spots WHERE id=?").bind(sourceId).run();
+  await env.DB.prepare(
+    "DELETE FROM sub_schedules WHERE member=? AND source_type='spot' AND source_id=?"
+  ).bind(member, sourceId).run();
+  return { deleted: sourceId };
+}
+
+async function pruneOrphanPersonalSubSchedules(env, member) {
+  const { results } = await env.DB.prepare(
+    `SELECT id, source_type, source_id
+     FROM sub_schedules
+     WHERE member=?
+       AND source_type IN ('restaurant', 'spot')
+       AND source_id > 0`
+  ).bind(member).all();
+
+  const deletions = [];
+  for (const row of results || []) {
+    const sourceId = Number(row.source_id) || 0;
+    if (!sourceId) continue;
+
+    if (row.source_type === "restaurant") {
+      const exists = await env.DB.prepare(
+        "SELECT 1 FROM my_restaurants WHERE member=? AND id=?"
+      ).bind(member, sourceId).first();
+      if (!exists) deletions.push(env.DB.prepare("DELETE FROM sub_schedules WHERE id=?").bind(row.id));
+    }
+
+    if (row.source_type === "spot") {
+      const exists = await env.DB.prepare(
+        "SELECT 1 FROM my_spots WHERE member=? AND id=?"
+      ).bind(member, sourceId).first();
+      if (!exists) deletions.push(env.DB.prepare("DELETE FROM sub_schedules WHERE id=?").bind(row.id));
+    }
+  }
+
+  if (deletions.length) {
+    await env.DB.batch(deletions);
+  }
 }
 
 function normalizeAreaText(value) {
@@ -529,6 +575,7 @@ async function autoAddToSubSchedule(env, member, item) {
   });
 }
 async function getSubSchedules(env, member) {
+  await pruneOrphanPersonalSubSchedules(env, member);
   const { results } = await env.DB.prepare(
     "SELECT * FROM sub_schedules WHERE member = ? ORDER BY schedule_id ASC, sort_order ASC, id ASC"
   ).bind(member).all();
