@@ -671,36 +671,36 @@ async function seedMasterData(env) {
 
 const scheduleData = [
   // D1 | 6/4 (四) 下町風情初體驗
-  [1, "2026-06-04", "15:20", "入境、領行李、購買交通卡", "", "交通", "成田機場", "https://maps.app.goo.gl/71RhsAwPvfBhpT4z7?g_st=ic", 0],
-  [1, "2026-06-04", "16:30", "搭乘 Skyliner 至京城上野站", "約 43分鐘", "交通", "京城上野站", "", 0],
-  [1, "2026-06-04", "17:30", "飯店 Check-in 放置行李", "Tosei Hotel Cocone Ueno Okachimachi", "住宿", "Tosei Hotel Cocone Ueno Okachimachi", "https://maps.app.goo.gl/Wkad4N8HbuyNnUAn7?g_st=ic", 0],
-  [1, "2026-06-04", "18:30", "阿美橫丁 (Ameyoko)", "體驗熱鬧居酒屋 culture，在此享用晚餐。", "景點", "阿美橫町", "https://maps.app.goo.gl/RhjoAZKz8io2JDW69?g_st=ic", 1],
-  [1, "2026-06-04", "20:30", "淺草寺雷門", "夜間點燈漫步，此時遊客較少，適合拍照。", "景點", "淺草寺雷門", "https://maps.app.goo.gl/AnqT3DV4p7sWx1Ch7?g_st=ic", 0],
+  [1, "2026-06-04", "15:20 - 16:30", "入境、領行李、購買交通卡", "", "交通", "成田機場", "https://maps.app.goo.gl/71RhsAwPvfBhpT4z7?g_st=ic", 0],
+  [1, "2026-06-04", "16:30 - 17:15", "搭乘 Skyliner 至京城上野站", "約 43分鐘", "交通", "京城上野站", "", 0],
+  [1, "2026-06-04", "17:30 - 18:00", "飯店 Check-in 放置行李", "Tosei Hotel Cocone Ueno Okachimachi", "住宿", "Tosei Hotel Cocone Ueno Okachimachi", "https://maps.app.goo.gl/Wkad4N8HbuyNnUAn7?g_st=ic", 0],
+  [1, "2026-06-04", "18:30 - 20:00", "阿美橫丁 (Ameyoko)", "體驗熱鬧居酒屋 culture，在此享用晚餐。", "景點", "阿美橫町", "https://maps.app.goo.gl/RhjoAZKz8io2JDW69?g_st=ic", 1],
+  [1, "2026-06-04", "20:30 - 21:30", "淺草寺雷門", "夜間點燈漫步，此時遊客較少，適合拍照。", "景點", "淺草寺雷門", "https://maps.app.goo.gl/AnqT3DV4p7sWx1Ch7?g_st=ic", 0],
 
   // D2 | 6/5 (五) 築地海鮮、時尚銀座與經典鐵塔
-  [2, "2026-06-05", "09:00", "築地場外市場", "享用海鮮丼、玉子燒（早午餐）。", "餐飲", "築地市場", "https://maps.app.goo.gl/1LjhYRtz9CeQcCtQ6?g_st=ic", 1],
-  [2, "2026-06-05", "11:30", "銀座 (Ginza)", "逛精品店、Uniqlo 旗艦店，享用精緻下午茶。", "景點", "銀座", "https://maps.app.goo.gl/8aoNi6GAbcigseze7?g_st=ic", 1],
-  [2, "2026-06-05", "16:00", "東京鐵塔 (Tokyo Tower)", "抵達芝公園拍鐵塔夕陽。", "景點", "東京鐵塔", "https://maps.app.goo.gl/LUUcuYmHv3tSEvwLA?g_st=ic", 0],
-  [2, "2026-06-05", "18:30", "觀光巴士行程", "搭乘 Sky Bus 繞行鐵塔至彩虹大橋看夜景。觀光巴士沒搭到可以去六本木。", "景點", "東京鐵塔", "", 0],
-  [2, "2026-06-05", "20:00", "飯店附近享用晚餐", "", "餐飲", "阿美橫町", "https://maps.app.goo.gl/RhjoAZKz8io2JDW69?g_st=ic", 0],
+  [2, "2026-06-05", "09:00 - 11:00", "築地場外市場", "享用海鮮丼、玉子燒（早午餐）。", "餐飲", "築地市場", "https://maps.app.goo.gl/1LjhYRtz9CeQcCtQ6?g_st=ic", 1],
+  [2, "2026-06-05", "11:30 - 15:30", "銀座 (Ginza)", "逛精品店、Uniqlo 旗艦店，享用精緻下午茶。", "景點", "銀座", "https://maps.app.goo.gl/8aoNi6GAbcigseze7?g_st=ic", 1],
+  [2, "2026-06-05", "16:00 - 18:00", "東京鐵塔 (Tokyo Tower)", "抵達芝公園拍鐵塔夕陽。", "景點", "東京鐵塔", "https://maps.app.goo.gl/LUUcuYmHv3tSEvwLA?g_st=ic", 0],
+  [2, "2026-06-05", "18:30 - 19:30", "觀光巴士行程", "搭乘 Sky Bus 繞行鐵塔至彩虹大橋看夜景。觀光巴士沒搭到可以去六本木。", "景點", "東京鐵塔", "", 0],
+  [2, "2026-06-05", "20:00 - 21:30", "飯店附近享用晚餐", "", "餐飲", "阿美橫町", "https://maps.app.goo.gl/RhjoAZKz8io2JDW69?g_st=ic", 0],
 
   // D3 | 6/6 (六) 潮流尖端：澀谷、表參道、新宿
-  [3, "2026-06-06", "09:00", "表參道", "早午餐、逛街", "景點", "表參道", "https://maps.app.goo.gl/zxSE3mfxzPpgytFQ6?g_st=ic", 1],
-  [3, "2026-06-06", "11:40", "明治神宮", "感受森林靈氣與建築設計之美。", "景點", "明治神宮", "https://maps.app.goo.gl/zCyW2hx26CSQ7rQP7?g_st=ic", 0],
-  [3, "2026-06-06", "13:00", "澀谷", "逛宮下公園、澀谷 109、SHIBUYA SKY。", "景點", "澀谷", "https://maps.app.goo.gl/PwShcTPbXtEbFyY37?g_st=ic", 1],
-  [3, "2026-06-06", "19:00", "新宿", "看 3D 貓咪大樓、體驗不夜城氛圍、歌舞伎町與晚餐。", "景點", "新宿", "https://maps.app.goo.gl/4wnCEchphxuEWre98?g_st=ic", 1],
+  [3, "2026-06-06", "09:00 - 11:30", "表參道", "早午餐、逛街", "景點", "表參道", "https://maps.app.goo.gl/zxSE3mfxzPpgytFQ6?g_st=ic", 1],
+  [3, "2026-06-06", "11:40 - 12:40", "明治神宮", "感受森林靈氣與建築設計之美。", "景點", "明治神宮", "https://maps.app.goo.gl/zCyW2hx26CSQ7rQP7?g_st=ic", 0],
+  [3, "2026-06-06", "13:00 - 18:30", "澀谷", "逛宮下公園、澀谷 109、SHIBUYA SKY。", "景點", "澀谷", "https://maps.app.goo.gl/PwShcTPbXtEbFyY37?g_st=ic", 1],
+  [3, "2026-06-06", "19:00 - 21:30", "新宿", "看 3D 貓咪大樓、體驗不夜城氛圍、歌舞伎町與晚餐。", "景點", "新宿", "https://maps.app.goo.gl/4wnCEchphxuEWre98?g_st=ic", 1],
 
   // D4 | 6/7 (日) 水岸觀光與台場購物
-  [4, "2026-06-07", "09:00", "淺草寺", "正式參拜、仲見世通買御守與伴手禮。", "景點", "淺草寺", "https://maps.app.goo.gl/AnqT3DV4p7sWx1Ch7?g_st=ic", 0],
-  [4, "2026-06-07", "11:20", "觀光船 (HOTALUNA)", "從淺草搭船直達台場，沿途欣賞隅田川風景，須先至官網查看航班。", "交通", "淺草", "", 0],
-  [4, "2026-06-07", "12:30", "台場 (Odaiba)", "DiverCity 看鋼彈、購物中心 Outlet 掃貨。", "景點", "台場", "https://maps.app.goo.gl/mRaWswZFxTXhapce6?g_st=ic", 1],
-  [4, "2026-06-07", "18:40", "台場海濱公園", "看彩虹大橋與自由女神像夜景。", "景點", "台場海濱公園", "https://maps.app.goo.gl/exzry5qh5h2LnXby8?g_st=ic", 0],
+  [4, "2026-06-07", "09:00 - 11:00", "淺草寺", "正式參拜、仲見世通買御守與伴手禮。", "景點", "淺草寺", "https://maps.app.goo.gl/AnqT3DV4p7sWx1Ch7?g_st=ic", 0],
+  [4, "2026-06-07", "11:20 - 12:20", "觀光船 (HOTALUNA)", "從淺草搭船直達台場，沿途欣賞隅田川風景，須先至官網查看航班。", "交通", "淺草", "", 0],
+  [4, "2026-06-07", "12:30 - 18:30", "台場 (Odaiba)", "DiverCity 看鋼彈、購物中心 Outlet 掃貨。", "景點", "台場", "https://maps.app.goo.gl/mRaWswZFxTXhapce6?g_st=ic", 1],
+  [4, "2026-06-07", "18:40 - 19:30", "台場海濱公園", "看彩虹大橋與自由女神像夜景。", "景點", "台場海濱公園", "https://maps.app.goo.gl/exzry5qh5h2LnXby8?g_st=ic", 0],
 
   // D5 | 6/8 (一) 愜意早晨與機場免稅掃貨
-  [5, "2026-06-08", "08:30", "在地喫茶店", "飯店附近享用道地早餐。", "餐飲", "阿美橫町", "", 0],
-  [5, "2026-06-08", "09:30", "上野最後補貨", "阿美橫丁藥妝、伴手禮補齊遺漏清單。", "景點", "阿美橫町", "https://maps.app.goo.gl/RhjoAZKz8io2JDW69?g_st=ic", 0],
-  [5, "2026-06-08", "11:30", "搭乘 Skyliner 前往成田機場", "", "交通", "京城上野站", "https://maps.app.goo.gl/uAuCxwKEN8MgFyGHA?g_st=ic", 0],
-  [5, "2026-06-08", "12:30", "成田機場免稅店", "Fa-So-La 免稅店買伴手禮。", "景點", "成田機場", "", 0],
+  [5, "2026-06-08", "08:30 - 09:30", "在地喫茶店", "飯店附近享用道地早餐。", "餐飲", "阿美橫町", "", 0],
+  [5, "2026-06-08", "09:30 - 11:30", "上野最後補貨", "阿美橫丁藥妝、伴手禮補齊遺漏清單。", "景點", "阿美橫町", "https://maps.app.goo.gl/RhjoAZKz8io2JDW69?g_st=ic", 0],
+  [5, "2026-06-08", "11:30 - 12:15", "搭乘 Skyliner 前往成田機場", "", "交通", "京城上野站", "https://maps.app.goo.gl/uAuCxwKEN8MgFyGHA?g_st=ic", 0],
+  [5, "2026-06-08", "12:30 - 15:00", "成田機場免稅店", "Fa-So-La 免稅店買伴手禮。", "景點", "成田機場", "", 0],
   [5, "2026-06-08", "16:50", "登機返家", "帶著美好回憶返家。", "交通", "成田機場", "", 0]
 ];
   const ss = env.DB.prepare("INSERT INTO schedule (day,date,time,title,note,category,location,map_url,allow_sub) VALUES (?,?,?,?,?,?,?,?,?)");
@@ -763,7 +763,8 @@ const restData = [
   ["yellow 表參道", "表參道", "餐廳", "¥2000-¥3000", "https://maps.app.goo.gl/AcXY7jp2fgepDJF27?g_st=ic", "蛋包飯", "11:00-22:00", "", ""],
   ["i2 cafe", "表參道", "餐廳/咖啡廳", "¥1000-¥2000", "https://maps.app.goo.gl/sH5iAY1hiJ7HoXHo6?g_st=ic", "早午餐,沙拉,咖啡", "8:00-18:00", "", ""],
   ["I'm donut? Omotesando", "表參道", "小吃/甜點", "¥1000", "https://maps.app.goo.gl/m1QTqEsLYucQpncPA?g_st=ic", "生甜甜圈,排隊名店", "10:00-20:00", "", ""],
-  ["漢堡排 嘉", "表參道", "餐廳", "¥2000-¥3000", "https://maps.app.goo.gl/zDdxeP5sYBiZoTiq6?g_st=ic", "炭火漢堡排", "", "", ""]
+  ["漢堡排 嘉", "表參道", "餐廳", "¥2000-¥3000", "https://maps.app.goo.gl/zDdxeP5sYBiZoTiq6?g_st=ic", "炭火漢堡排", "", "", ""],
+  ["Gyu Star 牛スター 上野", "阿美橫町", "燒肉", "¥1000-¥2000", "https://maps.app.goo.gl/GuCX7Qw4B8K5uSia8?g_st=ic", "便宜燒肉", "11:00-15:00 17:00-23:00", "", ""]
 ];
   const rs = env.DB.prepare("INSERT INTO master_restaurants (name,area,type,price_range,map_url,feature,hours,note,recommend) VALUES (?,?,?,?,?,?,?,?,?)");
   await env.DB.batch(restData.map(r => rs.bind(...r)));
