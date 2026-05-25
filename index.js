@@ -380,10 +380,10 @@ async function updateExpenseWithSync(env, body) {
      WHERE id=?`
   ).bind(
     name, amount,
-    category || "?嗡?",
+    category || "其他",
     expense_date || "",
     note || "",
-    payment_method || "?暸?",
+    payment_method || "現金",
     effectiveTaxType,
     effectiveRefStatus,
     nextBatchId,
@@ -547,7 +547,12 @@ function areaMatches(left, right) {
   }
   return false;
 }
-// ── 自動比對 allow_sub 節點，加入子行程（不限日期，可提前排）──
+function getDeviceYmd(now = new Date()) {
+  // 讓日期判斷跟使用者裝置本地時間一致，避免跨時區造成主行程選錯。
+  return now.toLocaleDateString("sv-SE");
+}
+
+// ── 自動比對 allow_sub 節點，優先加入今天起算的主行程節點 ──
 async function autoAddToSubSchedule(env, member, item) {
   const area = item.area || "";
   const name = item.name || "";
@@ -559,15 +564,23 @@ async function autoAddToSubSchedule(env, member, item) {
 
   if (!candidates.length) return;
 
+  const today = getDeviceYmd();
+  const upcomingCandidates = candidates.filter(s => {
+    if (!s.date) return false;
+    return String(s.date) >= today;
+  });
+
+  if (!upcomingCandidates.length) return;
+
   const matched =
-    candidates.find(s => s.location && areaMatches(s.location, area)) ||
-    (name ? candidates.find(s => s.title && areaMatches(s.title, name)) : null);
+    upcomingCandidates.find(s => s.location && areaMatches(s.location, area)) ||
+    (name ? upcomingCandidates.find(s => s.title && areaMatches(s.title, name)) : null);
   if (!matched) return;
 
   await addSubSchedule(env, member, {
     schedule_id: matched.id,
     name: item.name,
-    type: item.source_type === "restaurant" ? "擗輒" : (item.type || "?舫?"),
+    type: item.source_type === "restaurant" ? "餐廳" : (item.type || "景點"),
     map_url: item.map_url || "",
     note: item.note || "",
     source_type: item.source_type,
