@@ -6,12 +6,12 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="旅の友">
+<meta name="apple-mobile-web-app-title" content="東京遊">
 <meta name="theme-color" content="#FFFFFF">
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="favicon.ico" type="image/x-icon">
 <link rel="apple-touch-icon" href="icon-192.png">
-<title>旅の友 🌸</title>
+<title>東京遊</title>
 <script>
   // ★ 填入你的 Cloudflare Worker 網址
   const API = "https://royal-hall-ee65.dgzhilg.workers.dev/";
@@ -574,7 +574,7 @@ body{font-family:'Noto Sans TC',sans-serif;color:var(--ink);display:flex;justify
 <div class="screen" id="s-home">
   <div class="topbar">
     <div class="topbar-row">
-      <div><div class="topbar-title">旅の友 🌸</div><div class="topbar-sub" id="topDate"></div></div>
+      <div><div class="topbar-title">東京遊</div><div class="topbar-sub" id="topDate"></div></div>
       <div class="avatar" id="userEmoji" onclick="confirmLogout()">👤</div>
     </div>
   </div>
@@ -2455,8 +2455,8 @@ async function refreshSubSchedules(){
 function openAddToSched(sourceType, sourceId){
   // 找到來源項目
   const item = sourceType==="restaurant"
-    ? S.rest.mine.find(r=>r.id===sourceId)
-    : S.spots.mine.find(s=>s.id===sourceId);
+    ? S.rest.mine.find(r=>Number(r.id)===Number(sourceId))
+    : S.spots.mine.find(s=>Number(s.id)===Number(sourceId));
   if(!item){ toast("找不到項目"); return; }
 
   // 只列出允許掛子行程的主行程節點（allow_sub=1）
@@ -2487,12 +2487,12 @@ function openAddToSched(sourceType, sourceId){
 
 async function doAddToSched(sourceType, sourceId, scheduleId){
   const item = sourceType==="restaurant"
-    ? S.rest.mine.find(r=>r.id===sourceId)
-    : S.spots.mine.find(s=>s.id===sourceId);
+    ? S.rest.mine.find(r=>Number(r.id)===Number(sourceId))
+    : S.spots.mine.find(s=>Number(s.id)===Number(sourceId));
   if(!item){ toast("找不到項目"); return; }
   closeModal();
 
-  const res = await POST(`/api/sub-schedules/add-manual${mq()}`, {
+  const res = await POST(`/api/sub-schedules${mq()}`, {
     schedule_id: scheduleId,
     name: item.name,
     type: sourceType==="restaurant" ? "餐廳" : (item.type||"景點"),
