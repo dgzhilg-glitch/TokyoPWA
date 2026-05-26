@@ -407,7 +407,7 @@ async function getMyRestaurants(env, member) {
 }
 
 async function addMyRestaurant(env, member, body) {
-  const { name, area, type, price_range, map_url, note } = body;
+  const { name, area, type, price_range, map_url, note, device_date } = body;
   const existing = await env.DB.prepare(
     "SELECT * FROM my_restaurants WHERE member=? AND name=?"
   ).bind(member, name).first();
@@ -419,7 +419,7 @@ async function addMyRestaurant(env, member, body) {
       map_url: existing.map_url || map_url || "",
       note: existing.note || note || "",
       source_type: "restaurant",
-    });
+    }, device_date);
     return { id: existing.id, duplicate: true };
   }
   const res = await env.DB.prepare(
@@ -428,7 +428,7 @@ async function addMyRestaurant(env, member, body) {
   ).bind(member, name, area||"", type||"", price_range||"", map_url||"", note||"").first();
 
   // 自動加到今天對應主行程的子行程
-  await autoAddToSubSchedule(env, member, { id: res.id, name, area, map_url, note, source_type: "restaurant" });
+  await autoAddToSubSchedule(env, member, { id: res.id, name, area, map_url, note, source_type: "restaurant" }, device_date);
   return { id: res.id };
 }
 
@@ -454,7 +454,7 @@ async function getMySpots(env, member) {
 }
 
 async function addMySpot(env, member, body) {
-  const { name, area, type, map_url, note } = body;
+  const { name, area, type, map_url, note, device_date } = body;
   const existing = await env.DB.prepare(
     "SELECT * FROM my_spots WHERE member=? AND name=?"
   ).bind(member, name).first();
@@ -467,7 +467,7 @@ async function addMySpot(env, member, body) {
       note: existing.note || note || "",
       type: existing.type || type || "景點",
       source_type: "spot",
-    });
+    }, device_date);
     return { id: existing.id, duplicate: true };
   }
   const res = await env.DB.prepare(
@@ -476,7 +476,7 @@ async function addMySpot(env, member, body) {
   ).bind(member, name, area||"", type||"景點", map_url||"", note||"").first();
 
   // 自動加到今天對應主行程的子行程
-  await autoAddToSubSchedule(env, member, { id: res.id, name, area, map_url, note, type, source_type: "spot" });
+  await autoAddToSubSchedule(env, member, { id: res.id, name, area, map_url, note, type, source_type: "spot" }, device_date);
   return { id: res.id };
 }
 
@@ -547,13 +547,17 @@ function areaMatches(left, right) {
   }
   return false;
 }
-function getDeviceYmd(now = new Date()) {
-  // 讓日期判斷跟使用者裝置本地時間一致，避免跨時區造成主行程選錯。
+function getServerYmd(now = new Date()) {
   return now.toLocaleDateString("sv-SE");
 }
 
+function normalizeYmd(value) {
+  const text = String(value || "").trim();
+  return /^\d{4}-\d{2}-\d{2}$/.test(text) ? text : "";
+}
+
 // ── 自動比對 allow_sub 節點，優先加入今天起算的主行程節點 ──
-async function autoAddToSubSchedule(env, member, item) {
+async function autoAddToSubSchedule(env, member, item, deviceDate = "") {
   const area = item.area || "";
   const name = item.name || "";
   if (!area && !name) return;
@@ -564,7 +568,8 @@ async function autoAddToSubSchedule(env, member, item) {
 
   if (!candidates.length) return;
 
-  const today = getDeviceYmd();
+  // 優先使用前端傳來的裝置日期；舊版前端未傳時才回退到後端時間。
+  const today = normalizeYmd(deviceDate) || getServerYmd();
   const upcomingCandidates = candidates.filter(s => {
     if (!s.date) return false;
     return String(s.date) >= today;

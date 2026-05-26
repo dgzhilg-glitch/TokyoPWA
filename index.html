@@ -905,6 +905,7 @@ async function POST(path, body={}) {
   } catch(e){ console.error("POST", path, e); return null; }
 }
 const mq = () => `?member=${encodeURIComponent(S.member)}`;
+const getDeviceYmd = (now = new Date()) => now.toLocaleDateString("sv-SE");
 
 // ════════════════════════════════
 //  INIT
@@ -2014,7 +2015,15 @@ function setRestArea(area){
 async function addRest(i){
   const r=S.rest.master[i];
   if(S.rest.mine.some(m=>m.name===r.name)){toast("已在清單中");return;}
-  const res=await POST(`/api/restaurants/mine${mq()}`,{name:r.name,area:r.area,type:r.type,price_range:r.price_range,map_url:r.map_url,note:r.feature});
+  const res=await POST(`/api/restaurants/mine${mq()}`,{
+    name:r.name,
+    area:r.area,
+    type:r.type,
+    price_range:r.price_range,
+    map_url:r.map_url,
+    note:r.feature,
+    device_date:getDeviceYmd()
+  });
   if(res?.duplicate){await refreshSubSchedules(); toast("已在清單中"); return;}
   S.rest.mine.push({...r,id:res?.id});
   // 同步子行程到前端 state
@@ -2114,7 +2123,14 @@ function setSpotArea(area){
 async function addSpot(i){
   const s=S.spots.master[i];
   if(S.spots.mine.some(m=>m.name===s.name)){toast("已在清單中");return;}
-  const res=await POST(`/api/spots/mine${mq()}`,{name:s.name,area:s.area,type:s.type,map_url:s.map_url,note:s.feature});
+  const res=await POST(`/api/spots/mine${mq()}`,{
+    name:s.name,
+    area:s.area,
+    type:s.type,
+    map_url:s.map_url,
+    note:s.feature,
+    device_date:getDeviceYmd()
+  });
   if(res?.duplicate){await refreshSubSchedules(); toast("已在清單中"); return;}
   S.spots.mine.push({...s,id:res?.id});
   await refreshSubSchedules();
@@ -2378,7 +2394,7 @@ async function saveTax(){
 async function saveRest(){
   const name=v("f0"); if(!name){toast("⚠️ 請填寫名稱");return;}
   if(S.rest.mine.some(r=>r.name===name)){closeModal();toast("已在清單中");return;}
-  const body={name,area:v("f1"),type:v("f2"),map_url:v("f3"),price_range:v("f4"),note:v("f5")};
+  const body={name,area:v("f1"),type:v("f2"),map_url:v("f3"),price_range:v("f4"),note:v("f5"),device_date:getDeviceYmd()};
   closeModal();
   const res=await POST(`/api/restaurants/mine${mq()}`,body);
   if(res?.duplicate){await refreshSubSchedules(); toast("已在清單中"); return;}
@@ -2391,7 +2407,7 @@ async function saveRest(){
 async function saveSpot_(){
   const name=v("f0"); if(!name){toast("⚠️ 請填寫名稱");return;}
   if(S.spots.mine.some(s=>s.name===name)){closeModal();toast("已在清單中");return;}
-  const body={name,area:v("f1"),type:document.getElementById("f2")?.value||"景點",map_url:v("f3")};
+  const body={name,area:v("f1"),type:document.getElementById("f2")?.value||"景點",map_url:v("f3"),device_date:getDeviceYmd()};
   closeModal();
   const res=await POST(`/api/spots/mine${mq()}`,body);
   if(res?.duplicate){await refreshSubSchedules(); toast("已在清單中"); return;}
