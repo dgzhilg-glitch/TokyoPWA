@@ -1978,8 +1978,8 @@ function renderRest(){
     ? `<div class="notice notice-amber"><i class="fas fa-info-circle"></i><span>管理員維護的共用推薦清單</span></div>`
     : `<div class="notice notice-sage"><i class="fas fa-user"></i><span>${S.member} 的個人餐廳清單</span></div>`;
 
-  const cards=filtered.length?filtered.map((r,i)=>{
-    const masterIdx=tab==="rec"?i:S.rest.master.findIndex(m=>m.name===r.name);
+  const cards=filtered.length?filtered.map((r)=>{
+    const masterId=Number(r.id)||0;
     const added=myNames.has(r.name);
     return `<div class="place-card">
       <div class="place-ico" style="background:${pbg(r.name)}">${rEmo(r.type||"")}</div>
@@ -1996,7 +1996,7 @@ function renderRest(){
           <div class="place-acts">
           ${r.map_url?`<button class="btn-map" onclick="openMap('${r.map_url}')"><i class="fas fa-map-marker-alt"></i>Maps</button>`:""}
           ${tab==="rec"
-            ? (added?`<button class="btn-done">✓ 已收藏</button>`:`<button class="btn-add-l" onclick="addRest(${masterIdx})">+ 加入清單</button>`)
+            ? (added?`<button class="btn-done">✓ 已收藏</button>`:`<button class="btn-add-l" onclick="addRest(${masterId})">+ 加入清單</button>`)
             : `<button class="btn-add-sched" onclick="openAddToSched('restaurant',${r.id})">+ 行程</button><button class="btn-del-l" onclick="delRest(${r.id})">移除</button>`}
         </div>
       </div>
@@ -2012,8 +2012,9 @@ function setRestArea(area){
   renderRest();
 }
 
-async function addRest(i){
-  const r=S.rest.master[i];
+async function addRest(id){
+  const r=S.rest.master.find(item=>Number(item.id)===Number(id));
+  if(!r){toast("找不到餐廳資料");return;}
   if(S.rest.mine.some(m=>m.name===r.name)){toast("已在清單中");return;}
   const res=await POST(`/api/restaurants/mine${mq()}`,{
     name:r.name,
@@ -2070,8 +2071,8 @@ function renderSpots(){
     ? `<div class="notice notice-amber"><i class="fas fa-info-circle"></i><span>管理員維護的共用推薦景點</span></div>`
     : `<div class="notice notice-sage"><i class="fas fa-user"></i><span>${S.member} 的個人景點清單</span></div>`;
 
-  const cards=filtered.length?filtered.map((s,i)=>{
-    const masterIdx=tab==="rec"?i:S.spots.master.findIndex(m=>m.name===s.name);
+  const cards=filtered.length?filtered.map((s)=>{
+    const masterId=Number(s.id)||0;
     const added=myNames.has(s.name), emo=typeEmo[s.type||"景點"]||"📍";
     // 交通資訊區塊
     const hasTransport=s.transport||s.station||s.exit||s.walk_min;
@@ -2102,7 +2103,7 @@ function renderSpots(){
             <div class="place-acts">
             ${s.map_url?`<button class="btn-map" onclick="openMap('${s.map_url}')"><i class="fas fa-map-marker-alt"></i>Maps</button>`:""}
             ${tab==="rec"
-              ? (added?`<button class="btn-done">✓ 已收藏</button>`:`<button class="btn-add-l" onclick="addSpot(${masterIdx})">+ 加入清單</button>`)
+              ? (added?`<button class="btn-done">✓ 已收藏</button>`:`<button class="btn-add-l" onclick="addSpot(${masterId})">+ 加入清單</button>`)
               : `<button class="btn-add-sched" onclick="openAddToSched('spot',${s.id})">+ 行程</button><button class="btn-del-l" onclick="delSpot(${s.id})">移除</button>`}
           </div>
         </div>
@@ -2120,8 +2121,9 @@ function setSpotArea(area){
   renderSpots();
 }
 
-async function addSpot(i){
-  const s=S.spots.master[i];
+async function addSpot(id){
+  const s=S.spots.master.find(item=>Number(item.id)===Number(id));
+  if(!s){toast("找不到景點資料");return;}
   if(S.spots.mine.some(m=>m.name===s.name)){toast("已在清單中");return;}
   const res=await POST(`/api/spots/mine${mq()}`,{
     name:s.name,
