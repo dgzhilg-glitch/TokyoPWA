@@ -721,8 +721,13 @@ const scheduleData = [
   [5, "2026-06-08", "12:30 - 15:00", "成田機場免稅店", "Fa-So-La 免稅店買伴手禮。", "景點", "成田機場", "", 0],
   [5, "2026-06-08", "16:50", "登機返家", "帶著美好回憶返家。", "交通", "成田機場", "", 0]
 ];
-  const ss = env.DB.prepare("INSERT INTO schedule (day,date,time,title,note,category,location,map_url,allow_sub) VALUES (?,?,?,?,?,?,?,?,?)");
-  await env.DB.batch(scheduleData.map(r => ss.bind(...r)));
+  const normalizedScheduleData = scheduleData.map((row) =>
+    row.length >= 10 ? [...row] : [...row, ""]
+  );
+  const ss = env.DB.prepare(
+    "INSERT INTO schedule (day,date,time,title,note,category,location,map_url,allow_sub,google_maps_list_url) VALUES (?,?,?,?,?,?,?,?,?,?)"
+  );
+  await env.DB.batch(normalizedScheduleData.map((row) => ss.bind(...row)));
 
   // 餐廳依照東京景點區域分類（area 對應景點區域）
   // 欄位：name,area,type,price_range,map_url,feature(逗號分隔多筆),hours,note,recommend
