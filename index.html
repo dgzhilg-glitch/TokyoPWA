@@ -2687,7 +2687,7 @@ const FB_SCHED = [
   {day:5, date:"2026-06-08", time:"11:30 - 12:15", title:"搭乘 Skyliner 前往成田機場", note:"", category:"交通", location:"京城上野站", map_url:"https://maps.app.goo.gl/uAuCxwKEN8MgFyGHA?g_st=ic", allow_sub:0},
   {day:5, date:"2026-06-08", time:"12:30 - 15:00", title:"成田機場免稅店", note:"Fa-So-La 免稅店買伴手禮。", category:"景點", location:"成田機場", map_url:"", allow_sub:0},
   {day:5, date:"2026-06-08", time:"16:50", title:"登機返家", note:"帶著美好回憶返家。", category:"交通", location:"成田機場", map_url:"", allow_sub:0},
-];
+].map((item) => ({ ...item, google_maps_list_url: item.google_maps_list_url || "" }));
 const FB_REST=[
   {id:1,name:"肉之大山",area:"阿美橫町",type:"餐廳/小吃",price_range:"¥1000",map_url:"https://maps.app.goo.gl/T41NYw3GN3tdHfyx6?g_st=ic",feature:"炸肉餅,可樂餅,串燒",hours:"11:00-23:00",note:"招牌炸肉餅人氣極高"},
   {id:2,name:"百果園",area:"阿美橫町",type:"小吃/水果",price_range:"¥1000",map_url:"https://maps.app.goo.gl/jdQVk21qbVJLvnbh7?g_st=ic",feature:"新鮮水果,現切水果串",hours:"10:00-19:00",note:"上野第一店"},
