@@ -1047,11 +1047,13 @@ window.addEventListener("pageshow", event => {
 });
 
 let _pendingMember="", _pendingEmoji="";
+const PROTECTED_MEMBER = "董董";
+const PROTECTED_MEMBER_PASSWORD = "8628";
 
 async function loadMemberGrid() {
   const list = await GET("/api/members") || [
     {name:"小秉",emoji:"🍪",role:""},{name:"董董",emoji:"🐈",role:""},
-    {name:"陳皮",emoji:"🐯",role:""},{name:"阿涵",emoji:"🐰",role:""},
+    {name:"陳皮",emoji:"🐯",role:""},{name:"阿涵",emoji:"🌊",role:""},
     {name:"熊熊",emoji:"🐻",role:""},{name:"海獺",emoji:"🦦",role:""},
   ];
   document.getElementById("memberGrid").innerHTML = list.map(m =>
@@ -1063,6 +1065,14 @@ async function loadMemberGrid() {
 }
 
 function selectMemberTile(name, emoji) {
+  if (name === PROTECTED_MEMBER) {
+    const password = prompt("請輸入密碼");
+    if (password !== PROTECTED_MEMBER_PASSWORD) {
+      alert("密碼錯誤");
+      return;
+    }
+  }
+
   // 點頭像立即進入
   S.member=name; S.emoji=emoji;
   localStorage.setItem("member",name);
