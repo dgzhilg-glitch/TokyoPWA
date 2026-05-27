@@ -73,6 +73,7 @@ export default {
         if (path === "/api/spots/delete")       return ok(await deleteMySpot(env, member, body.id));
         if (path === "/api/packing")            return ok(await addPackingItem(env, member, body));
         if (path === "/api/packing/toggle")     return ok(await togglePacking(env, body.id, body.checked));
+        if (path === "/api/packing/delete")     return ok(await deletePacking(env, member, body.id));
         if (path === "/api/sub-schedules")          return ok(await addSubSchedule(env, member, body));
         if (path === "/api/sub-schedules/add-manual") return ok(await addSubSchedule(env, member, body));
         if (path === "/api/sub-schedules/delete")   return ok(await deleteSubSchedule(env, body.id));
@@ -675,6 +676,11 @@ async function addPackingItem(env, member, body) {
 async function togglePacking(env, id, checked) {
   await env.DB.prepare("UPDATE packing SET checked=? WHERE id=?").bind(checked?1:0, id).run();
   return { id, checked };
+}
+
+async function deletePacking(env, member, id) {
+  await env.DB.prepare("DELETE FROM packing WHERE member=? AND id=?").bind(member, id).run();
+  return { deleted: id };
 }
 
 // ═══════════════════════════════════════════

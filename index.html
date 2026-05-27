@@ -323,6 +323,7 @@ body{font-family:'Noto Sans TC',sans-serif;color:var(--ink);display:flex;justify
 .pack-chk.on{background:var(--sage);border-color:var(--sage)}
 .pack-lbl{font-size:15px;flex:1}
 .pack-lbl.done{text-decoration:line-through;color:var(--ink-lt)}
+.pack-del{width:32px;height:32px;border:none;border-radius:9px;background:var(--danger-lt);color:var(--danger);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0}
 
 /* TABS */
 .tabs{display:flex;gap:4px;background:var(--border);border-radius:14px;padding:4px;margin-bottom:14px;flex-shrink:0}
@@ -2179,12 +2180,27 @@ function renderPack(){
       ${(item.checked||item.checked===1)?`<i class="fas fa-check" style="color:white;font-size:11px"></i>`:""}
     </div>
     <div class="pack-lbl ${(item.checked||item.checked===1)?"done":""}">${item.item}</div>
+    <button class="pack-del" onclick="deletePack(${item.id})" aria-label="刪除打包項目"><i class="fas fa-trash"></i></button>
   </div>`).join("") : `<div class="empty"><i class="fas fa-box"></i><p>尚無打包項目</p></div>`;
 }
 async function togglePack(id,checked){
   const item=S.packing.find(i=>i.id===id); if(!item)return;
-  item.checked=checked; renderPack();
+  S.packing=S.packing.map(i=>i.id===id?{...i,checked}:i); renderPack();
   await POST("/api/packing/toggle",{id,checked});
+}
+async function deletePack(id){
+  const item=S.packing.find(i=>i.id===id); if(!item)return;
+  if(!confirm(`刪除「${item.item}」？`))return;
+  S.packing=S.packing.filter(i=>i.id!==id); renderPack();
+  try{
+    await POST(`/api/packing/delete${mq()}`,{id});
+    toast("已刪除");
+  }catch(e){
+    console.error("delete packing fail",e);
+    S.packing=[...S.packing,item].sort((a,b)=>a.id-b.id);
+    renderPack();
+    toast("刪除失敗，請再試一次");
+  }
 }
 
 // ════════════════════════════════
@@ -2438,7 +2454,7 @@ async function savePack(){
   const item=v("f0"); if(!item){toast("⚠️ 請填寫名稱");return;}
   closeModal();
   const res=await POST(`/api/packing${mq()}`,{item});
-  S.packing.push({id:res?.id,item,checked:false}); renderPack(); toast("✅ 已新增");
+  S.packing=[...S.packing,{id:res?.id,item,checked:false}]; renderPack(); toast("✅ 已新增");
 }
 
 // ════════════════════════════════
