@@ -22,12 +22,12 @@ function err(msg, status = 400) {
 //  成員設定（修改這裡新增 / 刪除成員）
 // ═══════════════════════════════════════════
 const MEMBERS = [
-  { name: "小秉", emoji: "🧑", color: "#E8A0B4", role: "" },
-  { name: "董董", emoji: "👩", color: "#B5D4F4", role: "" },
-  { name: "陳皮", emoji: "👧", color: "#C0DD97", role: "" },
-  { name: "阿涵", emoji: "👧", color: "#FAC775", role: "" },
-  { name: "熊熊", emoji: "🧑", color: "#FAC775", role: "" },
-  { name: "海獺", emoji: "👧", color: "#FAC775", role: "" },
+  { name: "小秉", emoji: "🍪", color: "#E8A0B4", role: "" },
+  { name: "董董", emoji: "🐈", color: "#E8A0B4", role: "" },
+  { name: "陳皮", emoji: "🐯", color: "#C0DD97", role: "" },
+  { name: "阿涵", emoji: "🐰", color: "#FAC775", role: "" },
+  { name: "熊熊", emoji: "🐻", color: "#FAC775", role: "" },
+  { name: "海獺", emoji: "🦦", color: "#FAC775", role: "" },
 ];
 
 // ═══════════════════════════════════════════

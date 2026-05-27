@@ -1050,9 +1050,9 @@ let _pendingMember="", _pendingEmoji="";
 
 async function loadMemberGrid() {
   const list = await GET("/api/members") || [
-    {name:"小秉",emoji:"🧑",role:""},{name:"董董",emoji:"👩",role:""},
-    {name:"陳皮",emoji:"👩",role:""},{name:"阿涵",emoji:"👩",role:""},
-    {name:"熊熊",emoji:"🧑",role:""},{name:"海獺",emoji:"👩",role:""},
+    {name:"小秉",emoji:"🍪",role:""},{name:"董董",emoji:"🐈",role:""},
+    {name:"陳皮",emoji:"🐯",role:""},{name:"阿涵",emoji:"🐰",role:""},
+    {name:"熊熊",emoji:"🐻",role:""},{name:"海獺",emoji:"🦦",role:""},
   ];
   document.getElementById("memberGrid").innerHTML = list.map(m =>
     `<div class="member-tile" id="mt-${m.name}" onclick="selectMemberTile('${m.name}','${m.emoji}')">
