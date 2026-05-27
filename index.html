@@ -1512,7 +1512,7 @@ function renderMilestones(totalSpent, totalRefunded){
     if(unlockedCount < MILESTONES.length){
       const next   = MILESTONES[unlockedCount];
       const needed = (unlockedCount + 1) * MILESTONE_STEP - totalSpent;
-      nextEl.textContent = `再花 ¥${needed.toLocaleString()} 解鎖「${next.label}」`;
+      nextEl.textContent = ``;
     } else {
       nextEl.textContent = "🎉 全部里程碑已解鎖！";
     }
